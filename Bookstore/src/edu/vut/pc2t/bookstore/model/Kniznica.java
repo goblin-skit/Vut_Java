@@ -49,7 +49,7 @@ public class Kniznica {
 		System.out.println("Zadajte autora knihy: ");
 		String autor = sc.nextLine();
 		System.out.println("Zadajte rok vydania knihy: ");
-		int rokVydania = sc.nextInt();
+		int rokVydania = KeyboardInput.pouzeCelaCisla(sc);
 		
 		if(bookType == 1) {
 		// Kniha je Roman
@@ -68,7 +68,7 @@ public class Kniznica {
 		else {
 		// Kniha je Ucebnice
 			System.out.println("Zadajte odporucany rocnik pre ucebnicu: ");
-			int odporucenyRocnik = sc.nextInt();
+			int odporucenyRocnik = KeyboardInput.pouzeCelaCisla(sc);
 			
 			Ucebnice newUcebnice = new Ucebnice();
 			newUcebnice.setNazev(nazev);
@@ -84,7 +84,10 @@ public class Kniznica {
 	
 	public void editBook(Scanner sc) { //Edituje knihu podla mena
 		
+		System.out.println("Napiste nazev kniny ktoru chcete upravit: ");
+		String nazevKnihy = sc.nextLine();
 		
+		databaze.updateKniha(databaze.getKnihaByName(nazevKnihy));
 		
 	}
 	
