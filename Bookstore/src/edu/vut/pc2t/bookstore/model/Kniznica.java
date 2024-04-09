@@ -86,8 +86,30 @@ public class Kniznica {
 		
 		System.out.println("Napiste nazev kniny ktoru chcete upravit: ");
 		String nazevKnihy = sc.nextLine();
+		Kniha currentKniha = new Kniha();
 		
-		databaze.updateKniha(databaze.getKnihaByName(nazevKnihy));
+		currentKniha = databaze.getKnihaByName(nazevKnihy);
+		
+		System.out.println("Zvolena kniha: "+currentKniha.getNazev()+currentKniha.getAutor()+currentKniha.getRokVydani()+currentKniha.isJeDostupny());
+		
+		System.out.println("Zadajte noveho autora knihy: ");
+		String newAutor = sc.nextLine();
+		System.out.println("Zadajte novy rok vydania knihy: ");
+		int newRokVydania = KeyboardInput.pouzeCelaCisla(sc);
+		System.out.println("Zadajte novy stav dostupnosti knihy: 1-dostupny 2-nedostupny");
+		int newDostupnostInt = KeyboardInput.pouzeCelaCisla(sc);
+		boolean newDostupnost = false;
+		
+		if(newDostupnostInt == 1)
+			newDostupnost = true;
+		if(newDostupnostInt == 2)
+			newDostupnost = false;
+		
+		currentKniha.setAutor(newAutor);
+		currentKniha.setRokVydani(newRokVydania);
+		currentKniha.setJeDostupny(newDostupnost);
+		
+		databaze.updateKniha(currentKniha);
 		
 	}
 	

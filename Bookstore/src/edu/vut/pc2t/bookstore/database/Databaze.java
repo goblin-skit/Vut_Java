@@ -25,6 +25,7 @@ public class Databaze {
 		if(currentKniha != null) {
 			//TODO: Budeme riesit pri SQL Databaze
 		}
+		
 	}
 	
 	public Kniha getKnihaByName(String nazovKnihy) {
