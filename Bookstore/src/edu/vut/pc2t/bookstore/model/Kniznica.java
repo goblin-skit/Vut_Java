@@ -1,6 +1,8 @@
 package edu.vut.pc2t.bookstore.model;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Scanner;
 
@@ -84,6 +86,7 @@ public class Kniznica {
 	
 	public void editBook(Scanner sc) { //Edituje knihu podla mena
 		
+		boolean loop = true;
 		System.out.println("Napiste nazev kniny ktoru chcete upravit: ");
 		String nazevKnihy = sc.nextLine();
 		Kniha currentKniha = new Kniha();
@@ -94,23 +97,50 @@ public class Kniznica {
 		
 		System.out.println("Zadajte noveho autora knihy: ");
 		String newAutor = sc.nextLine();
-		System.out.println("Zadajte novy rok vydania knihy: ");
-		int newRokVydania = KeyboardInput.pouzeCelaCisla(sc);
-		System.out.println("Zadajte novy stav dostupnosti knihy: 1-dostupny 2-nedostupny");
-		int newDostupnostInt = KeyboardInput.pouzeCelaCisla(sc);
-		boolean newDostupnost = false;
-		
-		if(newDostupnostInt == 1)
-			newDostupnost = true;
-		if(newDostupnostInt == 2)
-			newDostupnost = false;
-		
 		currentKniha.setAutor(newAutor);
+		
+		System.out.println("Zadajte novy rok vydani knihy: ");
+		int newRokVydania = KeyboardInput.pouzeCelaCisla(sc);
 		currentKniha.setRokVydani(newRokVydania);
-		currentKniha.setJeDostupny(newDostupnost);
 		
+		while (loop == true) {
+			System.out.println("Zadajte novy stav dostupnosti knihy: 1-dostupny 0-nedostupny");
+			int newDostupnostInt = KeyboardInput.pouzeCelaCisla(sc);
+			boolean newDostupnost = false;
+			
+			switch (newDostupnostInt) {
+			case 0: {
+				newDostupnost = false;
+				break;
+			}
+			case 1: {
+				newDostupnost = true;
+				loop = false;
+				break;
+			}
+
+			default: {
+				System.out.println("Zadejte bud 0 nebo 1! ");
+			}
+			}
+			
+			/*if(newDostupnostInt == 1)
+			{
+				newDostupnost = true;
+				loop = false;
+			}
+
+			if(newDostupnostInt == 0)
+				newDostupnost = false;
+				loop = false;
+			else
+				*/
+			
+			currentKniha.setJeDostupny(newDostupnost);
+			loop = false;
+		}
+
 		databaze.updateKniha(currentKniha);
-		
 	}
 	
 }
