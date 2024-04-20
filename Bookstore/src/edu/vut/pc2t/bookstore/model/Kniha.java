@@ -49,8 +49,19 @@ public class Kniha {
 		return Objects.equals(autor, other.autor) && Objects.equals(nazev, other.nazev);
 	}
 	
+	public String printDruhKnihy() {
+		return null;
+	}
+	
 	public String getZaner() {
 		return null;
 	}
 	
+	public int getVhodnyRocnik() {
+		return (Integer) null;
+	}
+
+	public String printKniha() {
+		return null;
+	}
 }

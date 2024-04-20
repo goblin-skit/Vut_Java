@@ -7,11 +7,24 @@ public class Roman extends Kniha {
 	public void setZaner(String zaner) {
 		this.zaner = zaner;
 	}
+	
 	@Override
 	public String getZaner() {
 		return zaner;
 	}
 	
+	@Override
+	public String printDruhKnihy() {
+		return "Roman";
+	}
+	
+public String printKniha() {
+		
+		String printString;
+		printString = (printDruhKnihy()+": "+getNazev()+"; "+getAutor()+"; "+getRokVydani()+"; "+getZaner()+"; "+isJeDostupny());
+		
+		return printString;
+	}
 	
 }
 

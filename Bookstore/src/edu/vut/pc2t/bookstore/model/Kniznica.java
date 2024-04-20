@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Scanner;
 
+import javax.security.auth.login.AccountLockedException;
+
 import edu.vut.pc2t.bookstore.controller.KeyboardInput;
 import edu.vut.pc2t.bookstore.database.Databaze;
 
@@ -34,6 +36,13 @@ public class Kniznica {
 				case 1: addNewBook(sc); break;
 				
 				case 2: editBook(sc); break;
+				
+				case 3: deleteBook(sc); break;
+				
+				case 4: setAvalabilityToBook(sc); break;
+				
+				case 5: printAllBooks(); break;
+				
 			}
 			
 		}
@@ -45,18 +54,17 @@ public class Kniznica {
 		
 		System.out.println("Vyberte typ knihy: 1-Roman  2-Ucebnice");
 		int bookType = KeyboardInput.pouzeCelaCisla(sc);
-		
 		System.out.println("Zadajte nazev knihy: ");
-		String nazev = sc.nextLine();
+		String nazev = KeyboardInput.nextLine(sc);
 		System.out.println("Zadajte autora knihy: ");
-		String autor = sc.nextLine();
+		String autor = KeyboardInput.nextLine(sc);
 		System.out.println("Zadajte rok vydania knihy: ");
 		int rokVydania = KeyboardInput.pouzeCelaCisla(sc);
 		
 		if(bookType == 1) {
 		// Kniha je Roman
 			System.out.println("Zadajte zaner romanu: ");
-			String zaner = sc.nextLine();
+			String zaner = KeyboardInput.nextLine(sc); //TODO: Ivan treba checkovat nech input je String
 			
 			Roman newRoman = new Roman();
 			newRoman.setNazev(nazev);
@@ -85,62 +93,79 @@ public class Kniznica {
 	}
 	
 	public void editBook(Scanner sc) { //Edituje knihu podla mena
-		
 		boolean loop = true;
-		System.out.println("Napiste nazev kniny ktoru chcete upravit: ");
-		String nazevKnihy = sc.nextLine();
-		Kniha currentKniha = new Kniha();
 		
-		currentKniha = databaze.getKnihaByName(nazevKnihy);
+		Kniha currentKniha = searchKnihaFromKeyboardKniha(sc);
 		
-		System.out.println("Zvolena kniha: "+currentKniha.getNazev()+currentKniha.getAutor()+currentKniha.getRokVydani()+currentKniha.isJeDostupny());
+		System.out.println("Zadajte noveho autora knihy: "); //TODO: Ivan treba checkovat nech input je String
 		
-		System.out.println("Zadajte noveho autora knihy: ");
-		String newAutor = sc.nextLine();
+		String newAutor = KeyboardInput.nextLine(sc);
 		currentKniha.setAutor(newAutor);
 		
 		System.out.println("Zadajte novy rok vydani knihy: ");
+		
 		int newRokVydania = KeyboardInput.pouzeCelaCisla(sc);
 		currentKniha.setRokVydani(newRokVydania);
 		
-		while (loop == true) {
-			System.out.println("Zadajte novy stav dostupnosti knihy: 1-dostupny 0-nedostupny");
-			int newDostupnostInt = KeyboardInput.pouzeCelaCisla(sc);
-			boolean newDostupnost = false;
-			
-			switch (newDostupnostInt) {
-			case 0: {
-				newDostupnost = false;
-				break;
-			}
-			case 1: {
-				newDostupnost = true;
-				loop = false;
-				break;
-			}
-
-			default: {
-				System.out.println("Zadejte bud 0 nebo 1! ");
-			}
-			}
-			
-			/*if(newDostupnostInt == 1)
-			{
-				newDostupnost = true;
-				loop = false;
-			}
-
-			if(newDostupnostInt == 0)
-				newDostupnost = false;
-				loop = false;
-			else
-				*/
-			
-			currentKniha.setJeDostupny(newDostupnost);
-			loop = false;
-		}
+		
+		System.out.println("Zadajte dostupnost knihy: 0 -Nedostupny, 1 -Dostupny ");
+		int dostupnost = KeyboardInput.pouzeJednaNeboNula(sc);
+		
+		if(dostupnost == 1) currentKniha.setJeDostupny(true);
+		else currentKniha.setJeDostupny(false);
 
 		databaze.updateKniha(currentKniha);
 	}
 	
+	public void deleteBook (Scanner sc) { // Maze knihu podla mena
+		Kniha currentKniha = searchKnihaFromKeyboardKniha(sc);
+		
+		databaze.removeKniha(currentKniha); //TODO: treba dopisat potvrdenie pre mazanie nech sa to nerobi samo bez suhlasu
+		
+	}
+	
+	public void setAvalabilityToBook (Scanner sc) { 
+		Kniha currentKniha = searchKnihaFromKeyboardKniha(sc);
+		
+		System.out.println("Zadajte dostupnost knihy: 0 -Nedostupny, 1 -Dostupny ");
+		int dostupnost = KeyboardInput.pouzeJednaNeboNula(sc);
+		
+		if(dostupnost == 1) currentKniha.setJeDostupny(true);
+		else currentKniha.setJeDostupny(false);
+		
+		databaze.updateKniha(currentKniha);
+		
+		Kniha updatedKniha = databaze.getKnihaByName(currentKniha.getNazev());
+		System.out.println("Zmenena kniha: "+updatedKniha.printKniha());
+		
+	}
+	
+	public Kniha searchKnihaFromKeyboardKniha (Scanner sc) { // Returne objekt kniha z databazy podla mena podla inputu
+		System.out.println("Napiste nazev kniny ktoru chcete upravit: "); //TODO: Ivan treba checkovat nech input je String
+		
+		String nazevKnihy = KeyboardInput.nextLine(sc);
+		Kniha currentKniha = new Kniha();
+		
+		currentKniha = databaze.getKnihaByName(nazevKnihy);
+		/*
+		vrati pole
+		ako bude pole > ako 1 tak sa spyta ktoru knihu chceme, implementujeme to do vseobecnej metody   
+		*/
+		
+		System.out.println("Zvolena kniha: "+currentKniha.printKniha());
+		
+		return currentKniha;
+	}
+	
+	public void printAllBooks() {
+
+		for(Kniha kniha : databaze.getVsetkyKnihy()) {
+			System.out.println(databaze.getVsetkyKnihy().indexOf(kniha) + ": "+kniha.printKniha());
+			System.out.println("- - - - - - - - - - - - - - - - -");
+		}
+	}
+	
+	public void initDatabaze() {
+		databaze.initDatabaze();
+	}
 }

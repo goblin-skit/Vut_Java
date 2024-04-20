@@ -10,6 +10,7 @@ public class KeyboardInput {
 		try
 		{
 			cislo = sc.nextInt();
+			String catcherString = sc.nextLine();
 		}
 		catch(Exception e)
 		{
@@ -18,6 +19,28 @@ public class KeyboardInput {
 			sc.nextLine();
 			cislo = pouzeCelaCisla(sc);
 		}
+		return cislo;
+	}
+	
+	public static String nextLine(Scanner sc) {
+		String inputString = sc.nextLine();
+		//String catcherString = sc.nextLine();
+		
+		return inputString;
+	}
+	
+	public static int pouzeJednaNeboNula(Scanner sc) 
+	{
+		int cislo = pouzeCelaCisla(sc);
+		
+		if(cislo == 0 || cislo == 1) {
+			return cislo;
+		}
+		else {
+			System.out.println("Zadej 0 alebo 1 !");
+			cislo = pouzeJednaNeboNula(sc);
+		}
+		
 		return cislo;
 	}
 	

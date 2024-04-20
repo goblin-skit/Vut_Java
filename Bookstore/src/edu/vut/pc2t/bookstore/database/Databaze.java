@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import edu.vut.pc2t.bookstore.model.Kniha;
+import edu.vut.pc2t.bookstore.model.Roman;
+import edu.vut.pc2t.bookstore.model.Ucebnice;
 
 public class Databaze {
 	
@@ -28,7 +30,7 @@ public class Databaze {
 		
 	}
 	
-	public Kniha getKnihaByName(String nazovKnihy) {
+	public Kniha getKnihaByName(String nazovKnihy) { //TODO: Implementovat duplikaty
 		for(Kniha kniha : kniznica) {
 			if(kniha.getNazev().equalsIgnoreCase(nazovKnihy)){
 				return kniha;
@@ -69,6 +71,43 @@ public class Databaze {
 			}
 		}
 		return knihyVypujcene;
+	}
+	
+	public void initDatabaze() {
+		Roman roman1 = new Roman();
+		Roman roman2 = new Roman();
+		Ucebnice ucebnice1 = new Ucebnice();
+		Ucebnice ucebnice2 = new Ucebnice();
+		
+		roman1.setAutor("Adam Jakes");
+		roman1.setNazev("Ako som sa ucil programovat");
+		roman1.setJeDostupny(true);
+		roman1.setRokVydani(2024);
+		roman1.setZaner("Autobiografia");
+		
+		roman2.setAutor("Roman Jakes");
+		roman2.setNazev("Ako som ucil programovat");
+		roman2.setJeDostupny(true);
+		roman2.setRokVydani(2023);
+		roman2.setZaner("Autobiografia");
+		
+		ucebnice1.setAutor("Pavol Hamel");
+		ucebnice1.setNazev("Tanec pre zaciatocnikov");
+		ucebnice1.setJeDostupny(true);
+		ucebnice1.setRokVydani(1999);
+		ucebnice1.setVhodnyRocnik(18);
+		
+		ucebnice2.setAutor("Waldemar Matuska");
+		ucebnice2.setNazev("Spev pre mladych");
+		ucebnice2.setJeDostupny(true);
+		ucebnice2.setRokVydani(1989);
+		ucebnice2.setVhodnyRocnik(12);
+		
+		addKniha(roman1);
+		addKniha(roman2);
+		addKniha(ucebnice1);
+		addKniha(ucebnice2);
+		
 	}
 	
 }
