@@ -119,9 +119,13 @@ public class Kniznica {
 	
 	public void deleteBook (Scanner sc) { // Maze knihu podla mena
 		Kniha currentKniha = searchKnihaFromKeyboardKniha(sc);
+		System.out.println("Smazat \"" + currentKniha.printKniha() + "\"? (0 - Ne, 1 - Ano ");
 		
-		databaze.removeKniha(currentKniha); //TODO: treba dopisat potvrdenie pre mazanie nech sa to nerobi samo bez suhlasu
+		int confirm = KeyboardInput.pouzeJednaNeboNula(sc);
 		
+		if(confirm == 1) databaze.removeKniha(currentKniha);
+		else System.out.println("Rusim akci...");
+				
 	}
 	
 	public void setAvalabilityToBook (Scanner sc) { 

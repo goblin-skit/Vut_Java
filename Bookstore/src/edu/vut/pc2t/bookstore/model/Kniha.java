@@ -64,4 +64,9 @@ public class Kniha {
 	public String printKniha() {
 		return null;
 	}
+	public String printIsJeDostupny() {
+		if (this.isJeDostupny() == true) return "Ano";
+		else return "Ne";
+	}
+	
 }

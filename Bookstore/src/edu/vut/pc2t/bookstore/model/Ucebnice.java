@@ -1,5 +1,7 @@
 package edu.vut.pc2t.bookstore.model;
 
+import java.util.Scanner;
+
 public class Ucebnice extends Kniha {
 	
 	int vhodnyRocnik;
@@ -21,8 +23,8 @@ public class Ucebnice extends Kniha {
 public String printKniha() {
 		
 		String printString;
-		printString = (printDruhKnihy()+": "+getNazev()+"; "+getAutor()+"; "+getRokVydani()+"; "+getVhodnyRocnik()+"; "+isJeDostupny());
-		
+		printString = (printDruhKnihy()+": \n"+"\tNazev: "+getNazev()+"\n\tAutor: "+getAutor()+"\\n\\tRok vydani: "+getRokVydani()+"\\n\\tVhodny rocnik: "+getVhodnyRocnik()+"\\n\\tJe dostupny: "+printIsJeDostupny());
+				
 		return printString;
 	}
 	
