@@ -56,8 +56,10 @@ public class Databaze {
 	public List<Kniha> getVsetkyKnihyByZaner(String zaner) {
 		List<Kniha> knihyZaner = new ArrayList<Kniha>();
 		for(Kniha kniha : kniznica) {
-			if(kniha.getZaner().equalsIgnoreCase(zaner)){
-				knihyZaner.add(kniha);
+			if(kniha.getZaner() != null) {
+				if(kniha.getZaner().equalsIgnoreCase(zaner)){
+					knihyZaner.add(kniha);
+				}
 			}
 		}
 		return knihyZaner;

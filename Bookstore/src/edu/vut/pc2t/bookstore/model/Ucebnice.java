@@ -23,7 +23,7 @@ public class Ucebnice extends Kniha {
 public String printKniha() {
 		
 		String printString;
-		printString = (printDruhKnihy()+": \n"+"\tNazev: "+getNazev()+"\n\tAutor: "+getAutor()+"\\n\\tRok vydani: "+getRokVydani()+"\\n\\tVhodny rocnik: "+getVhodnyRocnik()+"\\n\\tJe dostupny: "+printIsJeDostupny());
+		printString = (printDruhKnihy()+": \n"+"\tNazev: "+getNazev()+"\n\tAutor: "+getAutor()+"\n\tRok vydani: "+getRokVydani()+"\n\tVhodny rocnik: "+getVhodnyRocnik()+"\n\tJe dostupny: "+printIsJeDostupny()+"\n");
 				
 		return printString;
 	}

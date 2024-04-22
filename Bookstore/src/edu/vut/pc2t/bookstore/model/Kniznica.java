@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.security.auth.login.AccountLockedException;
@@ -43,6 +46,14 @@ public class Kniznica {
 				
 				case 5: printAllBooks(); break;
 				
+				case 6: searchBook(sc); break;
+				
+				case 7: getKnihyAutora(sc); break;
+				
+				case 8: getKnhyVZanri(sc); break;
+				
+				case 9: vypujceneKnihy(); break;
+				
 			}
 			
 		}
@@ -52,8 +63,8 @@ public class Kniznica {
 	
 	public void addNewBook(Scanner sc) { //Pridava knihu do databazy
 		
-		System.out.println("Vyberte typ knihy: 1-Roman  2-Ucebnice");
-		int bookType = KeyboardInput.pouzeCelaCisla(sc);
+		System.out.println("Vyberte typ knihy: 0-Roman  1-Ucebnice");
+		int bookType = KeyboardInput.pouzeJednaNeboNula(sc);
 		System.out.println("Zadajte nazev knihy: ");
 		String nazev = KeyboardInput.nextLine(sc);
 		System.out.println("Zadajte autora knihy: ");
@@ -61,7 +72,7 @@ public class Kniznica {
 		System.out.println("Zadajte rok vydania knihy: ");
 		int rokVydania = KeyboardInput.pouzeCelaCisla(sc);
 		
-		if(bookType == 1) {
+		if(bookType == 0) {
 		// Kniha je Roman
 			System.out.println("Zadajte zaner romanu: ");
 			String zaner = KeyboardInput.nextLine(sc); //TODO: Ivan treba checkovat nech input je String
@@ -119,7 +130,7 @@ public class Kniznica {
 	
 	public void deleteBook (Scanner sc) { // Maze knihu podla mena
 		Kniha currentKniha = searchKnihaFromKeyboardKniha(sc);
-		System.out.println("Smazat \"" + currentKniha.printKniha() + "\"? (0 - Ne, 1 - Ano ");
+		System.out.println("Smazat \"" + currentKniha.getNazev() + "\" ? (0 - Ne, 1 - Ano )");
 		
 		int confirm = KeyboardInput.pouzeJednaNeboNula(sc);
 		
@@ -162,11 +173,65 @@ public class Kniznica {
 	}
 	
 	public void printAllBooks() {
-
 		for(Kniha kniha : databaze.getVsetkyKnihy()) {
 			System.out.println(databaze.getVsetkyKnihy().indexOf(kniha) + ": "+kniha.printKniha());
 			System.out.println("- - - - - - - - - - - - - - - - -");
 		}
+	}
+	
+	public void searchBook(Scanner sc) {
+		System.out.println("Napiste nazev kniny ktoru chcete vyhladat: ");
+		
+		String nazevKnihy = KeyboardInput.nextLine(sc);
+		Kniha currentKniha = new Kniha();
+		
+		currentKniha = databaze.getKnihaByName(nazevKnihy);
+		
+		System.out.println(currentKniha.printKniha());
+	}
+	
+	public void getKnihyAutora(Scanner sc) { //TODO: Chronologicke vypisane podla roku vydania
+		System.out.println("Napiste meno autora ktoreho knihy chcete vypsat: ");
+		
+		List<Kniha> knihyAutora = new ArrayList<Kniha>();
+		
+		knihyAutora = databaze.getVsetkyKnihyByAutor(KeyboardInput.nextLine(sc));
+		
+		if(knihyAutora.isEmpty()) System.out.println("Autor neexistuje!");
+		else {
+			for(Kniha kniha : knihyAutora) {
+				System.out.println(kniha.printKniha());
+			}
+		}
+	}
+	
+	public void getKnhyVZanri(Scanner sc) {
+		System.out.println("Napiste zaner z ktoreho chcete vypsat knihy: ");
+		
+		List<Kniha> knihyVZanru = new ArrayList<Kniha>();
+		
+		knihyVZanru = databaze.getVsetkyKnihyByZaner(KeyboardInput.nextLine(sc));
+		
+		if(knihyVZanru.isEmpty()) System.out.println("V zanru nejsu zadne knihy!");
+		else {
+			for(Kniha kniha : knihyVZanru) {
+				System.out.println(kniha.printKniha());
+			}
+		}
+	}
+	
+	public void vypujceneKnihy() {
+		List<Kniha> vypujceneKnihy = new ArrayList<Kniha>();
+		
+		vypujceneKnihy = databaze.getVypujceneKnihy();
+		
+		if(vypujceneKnihy.isEmpty()) System.out.println("Nejsu vypujcene zadne knihy");
+		else {
+			for(Kniha kniha : vypujceneKnihy) {
+				System.out.println(kniha.printKniha());
+			}
+		}
+		
 	}
 	
 	public void initDatabaze() {
