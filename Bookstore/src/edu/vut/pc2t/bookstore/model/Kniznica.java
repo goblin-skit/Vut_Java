@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,14 +14,18 @@ import javax.security.auth.login.AccountLockedException;
 
 import edu.vut.pc2t.bookstore.controller.KeyboardInput;
 import edu.vut.pc2t.bookstore.database.Databaze;
+import edu.vut.pc2t.bookstore.database.H2Database;
 
 public class Kniznica {
 	
 	private Databaze databaze;
 
+	private H2Database sqlDatabaze;
+	
 	public Kniznica() {
 		super();
 		databaze = new Databaze();
+		sqlDatabaze = new H2Database();
 	}
 	
 	public boolean runKniznica() {
@@ -36,6 +41,8 @@ public class Kniznica {
 			int input = KeyboardInput.pouzeCelaCisla(sc);
 			
 			switch(input) {
+				case 0: initDatabaze(); break;
+			
 				case 1: addNewBook(sc); break;
 				
 				case 2: editBook(sc); break;
@@ -54,6 +61,7 @@ public class Kniznica {
 				
 				case 9: vypujceneKnihy(); break;
 				
+				case 99:  runLoop = false; break;
 			}
 			
 		}
@@ -197,6 +205,8 @@ public class Kniznica {
 		
 		knihyAutora = databaze.getVsetkyKnihyByAutor(KeyboardInput.nextLine(sc));
 		
+		knihyAutora.sort(Comparator.comparing(Kniha::getRokVydani));
+		
 		if(knihyAutora.isEmpty()) System.out.println("Autor neexistuje!");
 		else {
 			for(Kniha kniha : knihyAutora) {
@@ -234,6 +244,14 @@ public class Kniznica {
 		
 	}
 	
+	public Databaze getDatabaze() {
+		return databaze;
+	}
+
+	public H2Database getSqlDatabaze() {
+		return sqlDatabaze;
+	}
+
 	public void initDatabaze() {
 		databaze.initDatabaze();
 	}

@@ -1,6 +1,7 @@
 package edu.vut.pc2t.bookstore.database;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -75,11 +76,18 @@ public class Databaze {
 		return knihyVypujcene;
 	}
 	
+	public void sortKnihyPodlaRokuVydania() {
+	    kniznica.sort(Comparator.comparing(Kniha::getRokVydani));
+	}
+	
 	public void initDatabaze() {
 		Roman roman1 = new Roman();
 		Roman roman2 = new Roman();
+		Roman roman3 = new Roman();
+		Roman roman4 = new Roman();
 		Ucebnice ucebnice1 = new Ucebnice();
 		Ucebnice ucebnice2 = new Ucebnice();
+		
 		
 		roman1.setAutor("Adam Jakes");
 		roman1.setNazev("Ako som sa ucil programovat");
@@ -92,6 +100,18 @@ public class Databaze {
 		roman2.setJeDostupny(true);
 		roman2.setRokVydani(2023);
 		roman2.setZaner("Autobiografia");
+		
+		roman3.setAutor("Roman Jakes");
+		roman3.setNazev("Test1");
+		roman3.setJeDostupny(true);
+		roman3.setRokVydani(2022);
+		roman3.setZaner("Autobiografia");
+		
+		roman4.setAutor("Roman Jakes");
+		roman4.setNazev("Test2");
+		roman4.setJeDostupny(true);
+		roman4.setRokVydani(2021);
+		roman4.setZaner("Autobiografia");
 		
 		ucebnice1.setAutor("Pavol Hamel");
 		ucebnice1.setNazev("Tanec pre zaciatocnikov");
@@ -107,6 +127,8 @@ public class Databaze {
 		
 		addKniha(roman1);
 		addKniha(roman2);
+		addKniha(roman3);
+		addKniha(roman4);
 		addKniha(ucebnice1);
 		addKniha(ucebnice2);
 		

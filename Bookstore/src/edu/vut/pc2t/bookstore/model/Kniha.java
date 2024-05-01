@@ -54,11 +54,11 @@ public class Kniha {
 	}
 	
 	public String getZaner() {
-		return null;
+		return "";
 	}
 	
 	public int getVhodnyRocnik() {
-		return (Integer) null;
+		return -1;
 	}
 
 	public String printKniha() {
@@ -68,5 +68,7 @@ public class Kniha {
 		if (this.isJeDostupny() == true) return "Ano";
 		else return "Ne";
 	}
+	
+	
 	
 }

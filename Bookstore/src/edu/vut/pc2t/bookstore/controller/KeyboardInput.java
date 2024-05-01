@@ -46,6 +46,7 @@ public class KeyboardInput {
 	
 	public static void printMenu() {
 		System.out.println("Vyberte pozadovanou cinnost:");
+		System.out.println("0 .. initDatabaze");
 		System.out.println("1 .. pridanie novej knihy");
 		System.out.println("2 .. uprava knihy");
 		System.out.println("3 .. smazani knihy");
@@ -57,6 +58,7 @@ public class KeyboardInput {
 		System.out.println("9 .. vypis vypujcenych knih");
 		System.out.println("10 .. ulozit knihu do souboru");
 		System.out.println("11 .. nacist knihu ze souboru");
+		System.out.println("99 .. ukoncitProgram");
 	}
 	
 }
