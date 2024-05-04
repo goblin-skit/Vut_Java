@@ -13,6 +13,8 @@ import edu.vut.pc2t.bookstore.database.H2Database;
 
 public class Kniznica {
 	
+	public static final String[] VSETKY_ZANRE = {"Sci-Fi","Fantasy","Detektivka","Autobiografia","Kucharka"};
+	
 	private Databaze databaze;
 
 	private H2Database sqlDatabaze;
@@ -139,8 +141,6 @@ public class Kniznica {
 		
 		if(dostupnost == 1) currentKniha.setJeDostupny(true);
 		else currentKniha.setJeDostupny(false);
-
-		databaze.updateKniha(currentKniha);
 	}
 	
 	public void deleteBook (Scanner sc) { // Maze knihu podla mena
@@ -167,12 +167,6 @@ public class Kniznica {
 		
 		if(dostupnost == 1) currentKniha.setJeDostupny(true);
 		else currentKniha.setJeDostupny(false);
-		
-		databaze.updateKniha(currentKniha);
-		
-		Kniha updatedKniha = databaze.getKnihaByName(currentKniha.getNazev());
-		System.out.println("Zmenena kniha: "+updatedKniha.printKniha());
-		
 	}
 	
 	public Kniha selectKnihaByName(Scanner sc) {
@@ -230,8 +224,12 @@ public class Kniznica {
 	}
 	
 	public void printAllBooks() {
-		for(Kniha kniha : databaze.getVsetkyKnihy()) {
-			System.out.println(databaze.getVsetkyKnihy().indexOf(kniha) + ": "+kniha.printKniha());
+		
+		List<Kniha> vsetkyKnihy = databaze.getVsetkyKnihy();
+		
+		vsetkyKnihy.sort(Comparator.comparing(Kniha::getNazevAsUpperCase));
+		for(Kniha kniha : vsetkyKnihy) {
+			System.out.println(vsetkyKnihy.indexOf(kniha) + ": "+kniha.printKniha());
 			System.out.println("- - - - - - - - - - - - - - - - -");
 		}
 	}
@@ -270,9 +268,8 @@ public class Kniznica {
 	}
 	
 	public String vyberZaner(Scanner sc) {
-		String[] vsetkyZanre = {"Sci-Fi","Fantasy","Detektivka","Autobiografia","Kucharka"};
 		int i = 0;
-		for(String zaner : vsetkyZanre) {
+		for(String zaner : VSETKY_ZANRE) {
 			System.out.println(i + ": " + zaner);
 			System.out.println("- - - - - - - - - - - - - - - - -");
 			i++;
@@ -282,12 +279,12 @@ public class Kniznica {
 		while(loop) {
 			System.out.println("Zadaj index zanru ktory chces vybrat: ");
 			index = KeyboardInput.pouzeCelaCisla(sc);
-			if(index+1 > vsetkyZanre.length) {
+			if(index+1 > VSETKY_ZANRE.length) {
 				System.out.println("Zaner s indexom neni na vyber !!!");
 			}
 			else loop = false;
 		}
-		return vsetkyZanre[index];
+		return VSETKY_ZANRE[index];
 	}
 	
 	public void getKnhyVZanri(Scanner sc) {

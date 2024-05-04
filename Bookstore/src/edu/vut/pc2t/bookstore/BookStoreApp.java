@@ -18,13 +18,17 @@ public class BookStoreApp {
 		try {
 			kniznica.getSqlDatabaze().connectToSQLDB();
 			kniznica.getSqlDatabaze().readAllToMemory(kniznica.getDatabaze());
+			kniznica.getSqlDatabaze().disconnectFromSQLDB();
+			
 			kniznica.runKniznica();
-			System.out.println("Closing program ...");
+			
+			kniznica.getSqlDatabaze().connectToSQLDB();
 			kniznica.getSqlDatabaze().writeAllToSQLDB(kniznica.getDatabaze());
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		} finally {
 			kniznica.getSqlDatabaze().disconnectFromSQLDB();
+			System.out.println("Closing program ...");
 		}
 	}
 }

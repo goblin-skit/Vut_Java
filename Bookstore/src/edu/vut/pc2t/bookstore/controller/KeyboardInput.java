@@ -46,7 +46,7 @@ public class KeyboardInput {
 	
 	public static void printMenu() {
 		System.out.println("Vyberte pozadovanou cinnost:");
-		System.out.println("0 .. initDatabaze");
+		System.out.println("00 .. initDatabaze");
 		System.out.println("1 .. pridanie novej knihy");
 		System.out.println("2 .. uprava knihy");
 		System.out.println("3 .. smazani knihy");

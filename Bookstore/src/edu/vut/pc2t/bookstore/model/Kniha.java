@@ -12,6 +12,9 @@ public class Kniha {
 	public String getNazev() {
 		return nazev;
 	}
+	public String getNazevAsUpperCase() {
+		return nazev.toUpperCase();
+	}
 	public void setNazev(String nazev) {
 		this.nazev = nazev;
 	}

@@ -25,7 +25,7 @@ public class H2Database {
     public void connectToSQLDB() throws SQLException {
 
         connection = DriverManager.getConnection(jdbcURL, username, password);
-        System.out.println("Connected to H2 embedded database.");
+        //System.out.println("Connected to H2 embedded database.");
     }
 
     public void disconnectFromSQLDB() throws SQLException {
@@ -78,6 +78,8 @@ public class H2Database {
             insert(kniha, id);
             id++;
         }
+        
+        System.out.println("Writing to database...");
     }
 
     public void readAllToMemory(Databaze inMemoryDatabaze) throws SQLException {
@@ -120,5 +122,7 @@ public class H2Database {
                 inMemoryDatabaze.addKniha(ucebnice);
             }
         }
+        
+        System.out.println("Reading from database...");
     }
 }

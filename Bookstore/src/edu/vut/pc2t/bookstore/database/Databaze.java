@@ -23,14 +23,6 @@ public class Databaze {
 		kniznica.remove(kniha);
 	}
 	
-	public void updateKniha(Kniha knihaUpdate) {
-		Kniha currentKniha = getKnihaByName(knihaUpdate.getNazev());
-		if(currentKniha != null) {
-			//TODO: Budeme riesit pri SQL Databaze
-		}
-		
-	}
-	
 	public Kniha getKnihaByName(String nazovKnihy) { //TODO: Implementovat duplikaty
 		for(Kniha kniha : kniznica) {
 			if(kniha.getNazev().equalsIgnoreCase(nazovKnihy)){

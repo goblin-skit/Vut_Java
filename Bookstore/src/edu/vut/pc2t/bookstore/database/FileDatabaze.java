@@ -17,6 +17,10 @@ public class FileDatabaze {
 
 	public static final String DELIMITER_CHARACTER = "#";
 	
+	private FileDatabaze() {
+		throw new UnsupportedOperationException("Utility class, no instances allowed!");
+	}
+	
 	public static boolean writeKnihaToFile(Kniha kniha) throws IOException {
 		
 		String dataString = exportKniha(kniha);
@@ -48,9 +52,7 @@ public class FileDatabaze {
 	    return fileNames;
 	}
 
-	
-	
-	public static String exportKniha(Kniha kniha) {
+	private static String exportKniha(Kniha kniha) {
 		String exportString = "";
 		
 		exportString = exportString+kniha.printDruhKnihy()+DELIMITER_CHARACTER;
@@ -64,7 +66,7 @@ public class FileDatabaze {
 		return exportString;
 	}
 	
-	public static Kniha createKniha(String dataString) {
+	private static Kniha createKniha(String dataString) {
 		
 		String[] data = dataString.split(DELIMITER_CHARACTER);
 		
