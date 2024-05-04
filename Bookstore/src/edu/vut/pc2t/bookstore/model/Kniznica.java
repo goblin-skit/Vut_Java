@@ -1,5 +1,6 @@
 package edu.vut.pc2t.bookstore.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.Scanner;
 
 import edu.vut.pc2t.bookstore.controller.KeyboardInput;
 import edu.vut.pc2t.bookstore.database.Databaze;
+import edu.vut.pc2t.bookstore.database.FileDatabaze;
 import edu.vut.pc2t.bookstore.database.H2Database;
 
 public class Kniznica {
@@ -21,7 +23,7 @@ public class Kniznica {
 		sqlDatabaze = new H2Database();
 	}
 	
-	public boolean runKniznica() {
+	public boolean runKniznica() throws IOException {
 		
 		Scanner sc = new Scanner(System.in);
 		//TODO: na zacitatku musi byt read SQL databaza
@@ -34,7 +36,7 @@ public class Kniznica {
 			int input = KeyboardInput.pouzeCelaCisla(sc);
 			
 			switch(input) {
-				case 0: initDatabaze(); break;
+				case 00: initDatabaze(); break;
 			
 				case 1: addNewBook(sc); break;
 				
@@ -119,7 +121,7 @@ public class Kniznica {
 	public void editBook(Scanner sc) { //Edituje knihu podla mena
 		Kniha currentKniha;
 		
-		currentKniha = selectKniha(sc);
+		currentKniha = selectKnihaByName(sc);
 		
 		System.out.println("Zadajte noveho autora knihy: "); //TODO: Ivan treba checkovat nech input je String
 		
@@ -144,7 +146,7 @@ public class Kniznica {
 	public void deleteBook (Scanner sc) { // Maze knihu podla mena
 		Kniha currentKniha;
 		
-		currentKniha = selectKniha(sc);
+		currentKniha = selectKnihaByName(sc);
 		
 		System.out.println("Smazat \"" + currentKniha.getNazev() + "\" ? (0 - Ne, 1 - Ano )");
 		
@@ -158,7 +160,7 @@ public class Kniznica {
 	public void setAvalabilityToBook (Scanner sc) { 
 		Kniha currentKniha;
 		
-		currentKniha = selectKniha(sc);
+		currentKniha = selectKnihaByName(sc);
 		
 		System.out.println("Zadajte dostupnost knihy: 0 -Nedostupny, 1 -Dostupny ");
 		int dostupnost = KeyboardInput.pouzeJednaNeboNula(sc);
@@ -173,12 +175,12 @@ public class Kniznica {
 		
 	}
 	
-	public Kniha selectKniha(Scanner sc) {
+	public Kniha selectKnihaByName(Scanner sc) {
 		Kniha currentKniha;
 		
 		boolean loop = false;
 		do {
-			currentKniha = searchKnihaFromKeyboardKniha(sc);
+			currentKniha = searchKnihaFromKeyboardByName(sc);
 			if(currentKniha == null) {
 				loop = true;
 			} else loop = false;
@@ -187,8 +189,8 @@ public class Kniznica {
 		return currentKniha;
 	}
 	
-	public Kniha searchKnihaFromKeyboardKniha (Scanner sc) { // Returne objekt kniha z databazy podla mena podla inputu
-		System.out.println("Napiste nazev kniny ktoru chcete upravit: "); //TODO: Ivan treba checkovat nech input je String
+	public Kniha searchKnihaFromKeyboardByName (Scanner sc) { // Returne objekt kniha z databazy podla mena podla inputu
+		System.out.println("Napiste nazev kniny: "); //TODO: Ivan treba checkovat nech input je String
 		
 		String nazevKnihy = KeyboardInput.nextLine(sc);
 		Kniha currentKniha = new Kniha();
@@ -317,12 +319,45 @@ public class Kniznica {
 		
 	}
 	
-	public void ulozKnihu(Scanner sc) {
+	public void ulozKnihu(Scanner sc) throws IOException {
+		Kniha currentKniha;
 		
+		currentKniha = selectKnihaByName(sc);
+		
+		FileDatabaze.writeKnihaToFile(currentKniha);
 	}
 	
-	public void nacitajKnihu(Scanner sc) {
+	public void nacitajKnihu(Scanner sc) throws IOException {
+		List<String> allFileNames = FileDatabaze.listFilesForFolder();
 		
+			for(String fileName : allFileNames) {
+				System.out.println(allFileNames.indexOf(fileName) + ": "+fileName);
+			}
+			boolean loop = true;
+			int index = 0;
+			while(loop) {
+				System.out.println("Zadaj index suboru ktory chces nacitat: ");
+				index = KeyboardInput.pouzeCelaCisla(sc);
+				if(index+1 > allFileNames.size()) {
+					System.out.println("Subor s indexom neni na vyber !!!");
+				}
+				else loop = false;
+			}
+			String selectedFileName = allFileNames.get(index);
+			
+			Kniha newKniha = FileDatabaze.readKnihaFromFile(selectedFileName);
+			
+			if(newKniha == null) {
+				System.out.println("!! Kniha sa nepodarila nacitat zo suboru !!");
+			}
+			
+			if(knihaExistuje(newKniha)) {
+				System.out.println("Kniha uz existuje.");
+				return;
+			}
+			databaze.addKniha(newKniha);
+			
+			System.out.println("Pridana kniha: \n" + newKniha.printKniha());
 	}
 	
 	public Databaze getDatabaze() {

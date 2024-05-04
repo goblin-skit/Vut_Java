@@ -3,8 +3,6 @@ package edu.vut.pc2t.bookstore.model;
 import java.util.Objects;
 
 public class Kniha {
-
-	public static final String DELIMITER_CHARACTER = "#";
 	
 	String nazev;
 	String autor;
@@ -65,28 +63,6 @@ public class Kniha {
 
 	public String printKniha() {
 		return null;
-	}
-	
-	public String exportKniha() {
-		String exportString = "";
-		
-		exportString = exportString+printDruhKnihy()+DELIMITER_CHARACTER;
-		exportString = exportString+getNazev()+DELIMITER_CHARACTER;
-		exportString = exportString+getAutor()+DELIMITER_CHARACTER;
-		exportString = exportString+getRokVydani()+DELIMITER_CHARACTER;
-		exportString = exportString+getVhodnyRocnik()+DELIMITER_CHARACTER;
-		exportString = exportString+getZaner()+DELIMITER_CHARACTER;
-		exportString = exportString+isJeDostupny();
-		
-		return exportString;
-	}
-	
-	public void importKniha(String dataString) {
-		String[] data = dataString.split(DELIMITER_CHARACTER);
-		
-		String druhKnihy = data[0];
-		
-		return;
 	}
 	
 	public String printIsJeDostupny() {
