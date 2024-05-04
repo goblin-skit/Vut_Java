@@ -64,7 +64,7 @@ public class H2Database {
         preparedStatement.setString(7, kniha.getZaner());
         preparedStatement.setInt(8, kniha.getVhodnyRocnik());
 
-        System.out.println(preparedStatement);
+        // System.out.println(preparedStatement);
         preparedStatement.executeUpdate();
     }
 
