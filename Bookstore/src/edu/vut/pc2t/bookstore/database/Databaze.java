@@ -40,6 +40,26 @@ public class Databaze {
 		return null;
 	}
 	
+	public List<Kniha> searchKnihaByName(String searchString) { //TODO: Implementovat duplikaty
+		List<Kniha> searchKniha = new ArrayList<Kniha>();
+		for(Kniha kniha : kniznica) {
+			if(kniha.getNazev().toUpperCase().contains(searchString.toUpperCase())){
+				searchKniha.add(kniha);
+			}
+		}
+		return searchKniha;
+	}
+	
+	public List<Kniha> searchVsetkyKnihaByAutor(String searchString) { //TODO: Sorting chronologicky podla roku vydania
+		List<Kniha> knihyAutora = new ArrayList<Kniha>();
+		for(Kniha kniha : kniznica) {
+			if(kniha.getAutor().toUpperCase().contains(searchString.toUpperCase())){
+				knihyAutora.add(kniha);
+			}
+		}
+		return knihyAutora;
+	}
+	
 	public List<Kniha> getVsetkyKnihy() { //TODO: Sorting podla abecedy
 		return kniznica;
 	}

@@ -1,16 +1,9 @@
 package edu.vut.pc2t.bookstore.model;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-
-import javax.security.auth.login.AccountLockedException;
 
 import edu.vut.pc2t.bookstore.controller.KeyboardInput;
 import edu.vut.pc2t.bookstore.database.Databaze;
@@ -61,6 +54,10 @@ public class Kniznica {
 				
 				case 9: vypujceneKnihy(); break;
 				
+				case 10: ulozKnihu(sc); break;
+				
+				case 11: nacitajKnihu(sc); break;
+				
 				case 99:  runLoop = false; break;
 			}
 			
@@ -74,7 +71,7 @@ public class Kniznica {
 		System.out.println("Vyberte typ knihy: 0-Roman  1-Ucebnice");
 		int bookType = KeyboardInput.pouzeJednaNeboNula(sc);
 		System.out.println("Zadajte nazev knihy: ");
-		String nazev = KeyboardInput.nextLine(sc);
+		String nazev = KeyboardInput.nextLine(sc); //TODO: Duplicitne knihy nepovolujeme
 		System.out.println("Zadajte autora knihy: ");
 		String autor = KeyboardInput.nextLine(sc);
 		System.out.println("Zadajte rok vydania knihy: ");
@@ -83,7 +80,7 @@ public class Kniznica {
 		if(bookType == 0) {
 		// Kniha je Roman
 			System.out.println("Zadajte zaner romanu: ");
-			String zaner = KeyboardInput.nextLine(sc); //TODO: Ivan treba checkovat nech input je String
+			String zaner = vyberZaner(sc);
 			
 			Roman newRoman = new Roman();
 			newRoman.setNazev(nazev);
@@ -91,6 +88,10 @@ public class Kniznica {
 			newRoman.setRokVydani(rokVydania);
 			newRoman.setJeDostupny(true); //Pri pridani je dostupna 
 			newRoman.setZaner(zaner);
+			if(knihaExistuje(newRoman)) {
+				System.out.println("Kniha uz existuje.");
+				return;
+			}
 			databaze.addKniha(newRoman);
 			
 		}
@@ -105,6 +106,10 @@ public class Kniznica {
 			newUcebnice.setRokVydani(rokVydania);
 			newUcebnice.setJeDostupny(true); //Pri pridani je dostupna 
 			newUcebnice.setVhodnyRocnik(odporucenyRocnik);
+			if(knihaExistuje(newUcebnice)) {
+				System.out.println("Kniha uz existuje.");
+				return;
+			}
 			databaze.addKniha(newUcebnice);
 			
 		}
@@ -112,9 +117,9 @@ public class Kniznica {
 	}
 	
 	public void editBook(Scanner sc) { //Edituje knihu podla mena
-		boolean loop = true;
+		Kniha currentKniha;
 		
-		Kniha currentKniha = searchKnihaFromKeyboardKniha(sc);
+		currentKniha = selectKniha(sc);
 		
 		System.out.println("Zadajte noveho autora knihy: "); //TODO: Ivan treba checkovat nech input je String
 		
@@ -137,7 +142,10 @@ public class Kniznica {
 	}
 	
 	public void deleteBook (Scanner sc) { // Maze knihu podla mena
-		Kniha currentKniha = searchKnihaFromKeyboardKniha(sc);
+		Kniha currentKniha;
+		
+		currentKniha = selectKniha(sc);
+		
 		System.out.println("Smazat \"" + currentKniha.getNazev() + "\" ? (0 - Ne, 1 - Ano )");
 		
 		int confirm = KeyboardInput.pouzeJednaNeboNula(sc);
@@ -148,7 +156,9 @@ public class Kniznica {
 	}
 	
 	public void setAvalabilityToBook (Scanner sc) { 
-		Kniha currentKniha = searchKnihaFromKeyboardKniha(sc);
+		Kniha currentKniha;
+		
+		currentKniha = selectKniha(sc);
 		
 		System.out.println("Zadajte dostupnost knihy: 0 -Nedostupny, 1 -Dostupny ");
 		int dostupnost = KeyboardInput.pouzeJednaNeboNula(sc);
@@ -163,21 +173,58 @@ public class Kniznica {
 		
 	}
 	
+	public Kniha selectKniha(Scanner sc) {
+		Kniha currentKniha;
+		
+		boolean loop = false;
+		do {
+			currentKniha = searchKnihaFromKeyboardKniha(sc);
+			if(currentKniha == null) {
+				loop = true;
+			} else loop = false;
+		} while(loop);
+		
+		return currentKniha;
+	}
+	
 	public Kniha searchKnihaFromKeyboardKniha (Scanner sc) { // Returne objekt kniha z databazy podla mena podla inputu
 		System.out.println("Napiste nazev kniny ktoru chcete upravit: "); //TODO: Ivan treba checkovat nech input je String
 		
 		String nazevKnihy = KeyboardInput.nextLine(sc);
 		Kniha currentKniha = new Kniha();
+		List<Kniha> najdeneKnihy =  new ArrayList<Kniha>();
+
+		najdeneKnihy = databaze.searchKnihaByName(nazevKnihy);
 		
-		currentKniha = databaze.getKnihaByName(nazevKnihy);
-		/*
-		vrati pole
-		ako bude pole > ako 1 tak sa spyta ktoru knihu chceme, implementujeme to do vseobecnej metody   
-		*/
-		
+		if(najdeneKnihy.size() > 1) {
+			currentKniha = vyberKnihuZoZoznamu(najdeneKnihy, sc);
+		}else if (najdeneKnihy.size() == 1) {
+			currentKniha = najdeneKnihy.get(0);
+		} else if (najdeneKnihy.size() == 0) {
+			System.out.println("Kniha s nazvom: "+nazevKnihy+" neexistuje.");
+			return null;
+		}
 		System.out.println("Zvolena kniha: "+currentKniha.printKniha());
 		
 		return currentKniha;
+	}
+	
+	public Kniha vyberKnihuZoZoznamu(List<Kniha> knihy, Scanner sc) {
+		for(Kniha kniha : knihy) {
+			System.out.println(knihy.indexOf(kniha) + ": "+kniha.printKniha());
+			System.out.println("- - - - - - - - - - - - - - - - -");
+		}
+		boolean loop = true;
+		int index = 0;
+		while(loop) {
+			System.out.println("Zadaj index knihy ktoru chces vybrat: ");
+			index = KeyboardInput.pouzeCelaCisla(sc);
+			if(index+1 > knihy.size()) {
+				System.out.println("Kniha s indexom neni na vyber !!!");
+			}
+			else loop = false;
+		}
+		return knihy.get(index);
 	}
 	
 	public void printAllBooks() {
@@ -185,6 +232,10 @@ public class Kniznica {
 			System.out.println(databaze.getVsetkyKnihy().indexOf(kniha) + ": "+kniha.printKniha());
 			System.out.println("- - - - - - - - - - - - - - - - -");
 		}
+	}
+	
+	public boolean knihaExistuje(Kniha knihaCheck) {
+		return databaze.getVsetkyKnihy().contains(knihaCheck);
 	}
 	
 	public void searchBook(Scanner sc) {
@@ -203,7 +254,8 @@ public class Kniznica {
 		
 		List<Kniha> knihyAutora = new ArrayList<Kniha>();
 		
-		knihyAutora = databaze.getVsetkyKnihyByAutor(KeyboardInput.nextLine(sc));
+		//knihyAutora = databaze.getVsetkyKnihyByAutor(KeyboardInput.nextLine(sc));
+		knihyAutora = databaze.searchVsetkyKnihaByAutor(KeyboardInput.nextLine(sc));
 		
 		knihyAutora.sort(Comparator.comparing(Kniha::getRokVydani));
 		
@@ -215,12 +267,33 @@ public class Kniznica {
 		}
 	}
 	
+	public String vyberZaner(Scanner sc) {
+		String[] vsetkyZanre = {"Sci-Fi","Fantasy","Detektivka","Autobiografia","Kucharka"};
+		int i = 0;
+		for(String zaner : vsetkyZanre) {
+			System.out.println(i + ": " + zaner);
+			System.out.println("- - - - - - - - - - - - - - - - -");
+			i++;
+		}
+		boolean loop = true;
+		int index = 0;
+		while(loop) {
+			System.out.println("Zadaj index zanru ktory chces vybrat: ");
+			index = KeyboardInput.pouzeCelaCisla(sc);
+			if(index+1 > vsetkyZanre.length) {
+				System.out.println("Zaner s indexom neni na vyber !!!");
+			}
+			else loop = false;
+		}
+		return vsetkyZanre[index];
+	}
+	
 	public void getKnhyVZanri(Scanner sc) {
 		System.out.println("Napiste zaner z ktoreho chcete vypsat knihy: ");
 		
 		List<Kniha> knihyVZanru = new ArrayList<Kniha>();
 		
-		knihyVZanru = databaze.getVsetkyKnihyByZaner(KeyboardInput.nextLine(sc));
+		knihyVZanru = databaze.getVsetkyKnihyByZaner(vyberZaner(sc));
 		
 		if(knihyVZanru.isEmpty()) System.out.println("V zanru nejsu zadne knihy!");
 		else {
@@ -241,6 +314,14 @@ public class Kniznica {
 				System.out.println(kniha.printKniha());
 			}
 		}
+		
+	}
+	
+	public void ulozKnihu(Scanner sc) {
+		
+	}
+	
+	public void nacitajKnihu(Scanner sc) {
 		
 	}
 	
