@@ -19,11 +19,10 @@ public class Databaze {
 	}
 	
 	public void removeKniha(Kniha kniha) {
-		//TODO: Pouzije equals ?
 		kniznica.remove(kniha);
 	}
 	
-	public Kniha getKnihaByName(String nazovKnihy) { //TODO: Implementovat duplikaty
+	public Kniha getKnihaByName(String nazovKnihy) {
 		for(Kniha kniha : kniznica) {
 			if(kniha.getNazev().equalsIgnoreCase(nazovKnihy)){
 				return kniha;
@@ -32,7 +31,7 @@ public class Databaze {
 		return null;
 	}
 	
-	public List<Kniha> searchKnihaByName(String searchString) { //TODO: Implementovat duplikaty
+	public List<Kniha> searchKnihaByName(String searchString) {
 		List<Kniha> searchKniha = new ArrayList<Kniha>();
 		for(Kniha kniha : kniznica) {
 			if(kniha.getNazev().toUpperCase().contains(searchString.toUpperCase())){
@@ -42,7 +41,7 @@ public class Databaze {
 		return searchKniha;
 	}
 	
-	public List<Kniha> searchVsetkyKnihaByAutor(String searchString) { //TODO: Sorting chronologicky podla roku vydania
+	public List<Kniha> searchVsetkyKnihaByAutor(String searchString) { 
 		List<Kniha> knihyAutora = new ArrayList<Kniha>();
 		for(Kniha kniha : kniznica) {
 			if(kniha.getAutor().toUpperCase().contains(searchString.toUpperCase())){
@@ -52,11 +51,11 @@ public class Databaze {
 		return knihyAutora;
 	}
 	
-	public List<Kniha> getVsetkyKnihy() { //TODO: Sorting podla abecedy
+	public List<Kniha> getVsetkyKnihy() {
 		return kniznica;
 	}
 	
-	public List<Kniha> getVsetkyKnihyByAutor(String autor) { //TODO: Sorting chronologicky podla roku vydania
+	public List<Kniha> getVsetkyKnihyByAutor(String autor) {
 		List<Kniha> knihyAutora = new ArrayList<Kniha>();
 		for(Kniha kniha : kniznica) {
 			if(kniha.getAutor().equalsIgnoreCase(autor)){

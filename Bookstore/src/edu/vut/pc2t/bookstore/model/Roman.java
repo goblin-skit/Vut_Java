@@ -21,7 +21,6 @@ public class Roman extends Kniha {
 public String printKniha() {
 		
 		String printString;
-		//printString = (printDruhKnihy()+": "+getNazev()+"; "+getAutor()+"; "+getRokVydani()+"; "+getZaner()+"; "+isJeDostupny());
 		printString = (printDruhKnihy()+": \n"+"\tNazev: "+getNazev()+"\n\tAutor: "+getAutor()+"\n\tRok vydani: "+getRokVydani()+"\n\tZanr: "+getZaner()+"\n\tJe dostupny: "+printIsJeDostupny()+"\n");
 		
 		return printString;

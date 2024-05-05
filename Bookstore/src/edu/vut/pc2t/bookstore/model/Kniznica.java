@@ -28,7 +28,6 @@ public class Kniznica {
 	public boolean runKniznica() throws IOException {
 		
 		Scanner sc = new Scanner(System.in);
-		//TODO: na zacitatku musi byt read SQL databaza
 		
 		boolean runLoop = true;
 		
@@ -70,12 +69,12 @@ public class Kniznica {
 		return false;
 	}
 	
-	public void addNewBook(Scanner sc) { //Pridava knihu do databazy
+	public void addNewBook(Scanner sc) {
 		
 		System.out.println("Vyberte typ knihy: 0-Roman  1-Ucebnice");
 		int bookType = KeyboardInput.pouzeJednaNeboNula(sc);
 		System.out.println("Zadajte nazev knihy: ");
-		String nazev = KeyboardInput.nextLine(sc); //TODO: Duplicitne knihy nepovolujeme
+		String nazev = KeyboardInput.nextLine(sc);
 		System.out.println("Zadajte autora knihy: ");
 		String autor = KeyboardInput.nextLine(sc);
 		System.out.println("Zadajte rok vydania knihy: ");
@@ -90,7 +89,7 @@ public class Kniznica {
 			newRoman.setNazev(nazev);
 			newRoman.setAutor(autor);
 			newRoman.setRokVydani(rokVydania);
-			newRoman.setJeDostupny(true); //Pri pridani je dostupna 
+			newRoman.setJeDostupny(true); 
 			newRoman.setZaner(zaner);
 			if(knihaExistuje(newRoman)) {
 				System.out.println("Kniha uz existuje.");
@@ -108,7 +107,7 @@ public class Kniznica {
 			newUcebnice.setNazev(nazev);
 			newUcebnice.setAutor(autor);
 			newUcebnice.setRokVydani(rokVydania);
-			newUcebnice.setJeDostupny(true); //Pri pridani je dostupna 
+			newUcebnice.setJeDostupny(true);
 			newUcebnice.setVhodnyRocnik(odporucenyRocnik);
 			if(knihaExistuje(newUcebnice)) {
 				System.out.println("Kniha uz existuje.");
@@ -120,12 +119,12 @@ public class Kniznica {
 		
 	}
 	
-	public void editBook(Scanner sc) { //Edituje knihu podla mena
+	public void editBook(Scanner sc) {
 		Kniha currentKniha;
 		
 		currentKniha = selectKnihaByName(sc);
 		
-		System.out.println("Zadajte noveho autora knihy: "); //TODO: Ivan treba checkovat nech input je String
+		System.out.println("Zadajte noveho autora knihy: ");
 		
 		String newAutor = KeyboardInput.nextLine(sc);
 		currentKniha.setAutor(newAutor);
@@ -143,7 +142,7 @@ public class Kniznica {
 		else currentKniha.setJeDostupny(false);
 	}
 	
-	public void deleteBook (Scanner sc) { // Maze knihu podla mena
+	public void deleteBook (Scanner sc) {
 		Kniha currentKniha;
 		
 		currentKniha = selectKnihaByName(sc);
@@ -183,8 +182,8 @@ public class Kniznica {
 		return currentKniha;
 	}
 	
-	public Kniha searchKnihaFromKeyboardByName (Scanner sc) { // Returne objekt kniha z databazy podla mena podla inputu
-		System.out.println("Napiste nazev kniny: "); //TODO: Ivan treba checkovat nech input je String
+	public Kniha searchKnihaFromKeyboardByName (Scanner sc) {
+		System.out.println("Napiste nazev kniny: ");
 		
 		String nazevKnihy = KeyboardInput.nextLine(sc);
 		Kniha currentKniha = new Kniha();
@@ -249,7 +248,7 @@ public class Kniznica {
 		System.out.println(currentKniha.printKniha());
 	}
 	
-	public void getKnihyAutora(Scanner sc) { //TODO: Chronologicke vypisane podla roku vydania
+	public void getKnihyAutora(Scanner sc) {
 		System.out.println("Napiste meno autora ktoreho knihy chcete vypsat: ");
 		
 		List<Kniha> knihyAutora = new ArrayList<Kniha>();

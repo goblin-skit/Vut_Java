@@ -83,7 +83,7 @@ public class FileDatabaze {
 			newRoman.setNazev(nazov);
 			newRoman.setAutor(autor);
 			newRoman.setRokVydani(rokVydania);
-			newRoman.setJeDostupny(dostupny); //Pri pridani je dostupna 
+			newRoman.setJeDostupny(dostupny);
 			newRoman.setZaner(zaner);
 			
 			return newRoman;
@@ -93,7 +93,7 @@ public class FileDatabaze {
 			newUcebnice.setNazev(nazov);
 			newUcebnice.setAutor(autor);
 			newUcebnice.setRokVydani(rokVydania);
-			newUcebnice.setJeDostupny(dostupny); //Pri pridani je dostupna 
+			newUcebnice.setJeDostupny(dostupny);
 			newUcebnice.setVhodnyRocnik(vhodnyRocnik);
 		
 			return newUcebnice;
