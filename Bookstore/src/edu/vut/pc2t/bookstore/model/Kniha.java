@@ -69,7 +69,7 @@ public class Kniha {
 	}
 	
 	public String printIsJeDostupny() {
-		if (this.isJeDostupny() == true) return "Ano";
+		if (isJeDostupny() == true) return "Ano";
 		else return "Ne";
 	}
 	

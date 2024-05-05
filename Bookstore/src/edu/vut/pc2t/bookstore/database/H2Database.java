@@ -55,7 +55,7 @@ public class H2Database {
          */
 
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_KNIHA_SQL);
-        preparedStatement.setInt(1, id); // id
+        preparedStatement.setInt(1, id);
         preparedStatement.setString(2, kniha.printDruhKnihy());
         preparedStatement.setString(3, kniha.getNazev());
         preparedStatement.setString(4, kniha.getAutor());
